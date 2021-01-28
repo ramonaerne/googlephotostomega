@@ -9,6 +9,12 @@ This is a simple bash script that will iterate through an unziped and pre-merged
 
 All that is left to do is move the contents of this folder in MEGA into the camera upload folder or where ever you want it. Notice that the modification time is changed due to the fact that MEGA sorts its pictures according to this timestamp.
 
+# 0. Prerequisites
+Install `jq` on Mac OS like so
+```
+brew install jq
+```
+
 # 1. Export your google photos via google takeout
 See [takeout.google.com](takeout.google.com), i exported only google photos including all albums and exported it in chunks of 2GB. Wait for the google link and download all chunks
 
@@ -30,8 +36,23 @@ ditto -x -k -V takeout-20190710T165610Z-001.zip \
 
 # 3. Adapt the script to your needs
 There is some variables you should adapt before running the script yourself
+inside `takeout.sh` change
 ```
 OUT=path/to/mega/synchronized/folder
 IN=path/to/gogle/takeout/folder
 ```
 
+if you have files with different endings, add then to the line in the for loop, e.g if you want to add files with the ending 'gif'
+add '-or -name '*.gif' to the find expression inside on the for loop line
+```
+for FILE in $(find $IN -name '*.jpg' -or -name '*.mp4' -or -name '*.JPG'); do
+```
+then becomes
+```
+for FILE in $(find $IN -name '*.jpg' -or -name '*.mp4' -or -name '*.JPG' -or -name '*.gif'); do
+```
+# 4. Run the script
+```
+chmod +x
+./takeout.sh
+```
